@@ -61,7 +61,7 @@ public class MemberService implements UserDetailsService {
         Member member = memberRepository.findByEmail(email)
                 .orElseThrow(()->new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
 
-       //권한 부여 (필요에 따라 주석 처리해서 사용하세요)
+        //권한 부여 (필요에 따라 주석 처리해서 사용하세요)
         List<GrantedAuthority> authorityList = new ArrayList<>();
 
 
@@ -129,6 +129,5 @@ public class MemberService implements UserDetailsService {
     public String findByEmail(Long id) {
         Member member = memberRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Member id: " + id + " not found"));
         return member.getEmail();
-    }:wq
-::
+    }
 }
