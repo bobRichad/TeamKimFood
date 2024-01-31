@@ -117,7 +117,7 @@ public class MemberService implements UserDetailsService {
     }
     public Long findById(Long id) {
         Member member = memberRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Member with email " + id + " not found"));
-        List<RecipeCategory> byMember = recipeCategoryRepository.findByMember(member);
+        RecipeCategory byMember = recipeCategoryRepository.findByMember(member);
         if (byMember == null) {
             return null;
         }else{
@@ -125,4 +125,10 @@ public class MemberService implements UserDetailsService {
             return member.getId();
         }
     }
+
+    public String findByEmail(Long id) {
+        Member member = memberRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Member id: " + id + " not found"));
+        return member.getEmail();
+    }:wq
+::
 }
