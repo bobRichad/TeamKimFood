@@ -69,13 +69,17 @@ public class OauthController {
         Map<String, Object> responseBody = new HashMap<>();
         responseBody.put("accessToken", accessToken);
         responseBody.put("userInfo", userInfo);
-        responseBody.put("success",true);
+        responseBody.put("success", true);
         // 여기서 리다이렉트 하지말고 토큰 값이랑 프론트에서 필요한 사용자 정보를 보내주면 됨
+
+
         return ResponseEntity.ok(responseBody);
-
-
     }
 
+
+
+
+    @GetMapping("/v2/user/me")
     public OAuthInfoResponse requestOauthInfo(String accessToken) {
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
@@ -88,19 +92,22 @@ public class OauthController {
         return response.getBody();
     }
 
-
     @GetMapping("/redirect")
     public ResponseEntity<Void> performRedirection(@RequestParam String redirectUrl) {
         // 리디렉션을 수행하는 302 응답 생성
         HttpHeaders headers = new HttpHeaders();
         headers.add("Location", redirectUrl);
         return new ResponseEntity<>(headers, HttpStatus.FOUND); // HttpStatus.FOUND: 302 응답 코드
-
-
-
-
     }
 
+    //    @PostMapping("/login")
+//    public ResponseEntity<?> login(@RequestBody LoginCredentialsVo loginCredentialsVo) {
+//
+//        Long memberForToken = memberService.findMemberForLogin(loginCredentialsVo.getUsername(), loginCredentialsVo.getPassword());
+//        log.info("이메일 : "+loginCredentialsVo.getUsername());
+//        AuthTokens tokens = authTokensGenerator.generate(memberForToken);
+//        log.info("토큰 : "+tokens.getAccessToken());
+//    }
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginCredentialsVo loginCredentialsVo) {
         try {

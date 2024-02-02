@@ -20,7 +20,8 @@ const RecipeForm = () => {
     const navigate = useNavigate();
     const authToken = localStorage.getItem('token');
     const [recipe, setRecipe] = useState(null);
-
+    // 기존 이미지를 추적하기 위한 새로운 state 추가
+    const [existingImages, setExistingImages] = useState([]);
     useEffect(() => {
         if (id) {
             setIsEditMode(true);
@@ -38,8 +39,9 @@ const RecipeForm = () => {
                         foodStuff: recipeData.foodStuff,
                         foodNationType: recipeData.foodNationType,
                         details: ingDoData.map(item => ({ ingredients: [item.ingredients], dosage: [item.dosage] })),
-                        recips: imgData.map(item => ({ explanations: [item.explanation], imgFiles: [item.imgUrl] })),
+                        recips: imgData.map(item => ({ explanations: [item.explanation], imgFiles: [{dataUrl:item.imgUrl}] })),
                     });
+                    setExistingImages(imgData.map(item => ({ imgUrl: item.imgUrl, explanation: item.explanation })));
                 })
                 .catch(error => console.error("레시피 불러오기 실패", error));
         }
@@ -49,7 +51,7 @@ const RecipeForm = () => {
         const files = Array.from(e.target.files);
         setNewImages((prev) => {
             const updated = [...prev];
-            updated[pairIndex] = files;
+            updated[pairIndex] = files.map(file => ({ index: pairIndex, file: file }));
             return updated;
         });
     };
@@ -157,7 +159,11 @@ const RecipeForm = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
+        // 기존 이미지를 formData에 추가
+        existingImages.forEach((img, index) => {
+            formData.append(`existingImgUrlList`, img.imgUrl);
+            formData.append(`existingExplanations`, img.explanation);
+        });
 
         // API변수 변환
         const formData = new FormData();
@@ -245,23 +251,34 @@ const RecipeForm = () => {
             })),
             explanations: recipeForm.recips.map((recip) => recip.explanations[0])
         }));
-        //이미지 파일 추가
-        newImages.forEach((files, index) => {
-            files.forEach((file, fileIndex) => {
-                formData.append(`newFoodImgFileList[${index}][${fileIndex}]`, file);
-            });
-
+        // 기존 이미지를 formData에 추가
+        existingImages.forEach((img, index) => {
+            formData.append(`existingImgUrlList`, img.imgUrl);
+            formData.append(`existingExplanations`, img.explanation);
         });
+        //이미지 파일 추가
+        if (newImages && newImages.length > 0) {
+            newImages.forEach((files) => {
+                files.forEach((fileObj) => {
+                    if (fileObj && fileObj.file) {
+                        formData.append('foodImgFileList', fileObj.file);
+                    }
+                });
+            });
+        }
+        const repIndex = repImageIndex ? repImageIndex.pairIndex : null;
+        console.log("repImageIndex:", repIndex); // 디버깅을 위한 로그 출력
+        formData.append('repImageIndex', repIndex);
+        for (let [key, value] of formData.entries()) {
+            console.log(`${key}:`, value);
+        }
         try {
-            const response = await axios.put(`/api/recipes/${id}`, formData, {
+            const response = await axios.put(`http://localhost:8080/api/recipes/${id}`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     'Authorization': `Bearer ${authToken}`
                 },
             });
-            for (let [key, value] of formData.entries()) {
-                console.log(key, value);
-            }
 
             if (response.status === 200) {
                 console.log('레시피가 성공적으로 수정되었습니다.');
@@ -314,8 +331,8 @@ const RecipeForm = () => {
                         <input
                             type="radio"
                             name="situation"
-                            value="ALONE"
-                            checked={recipeForm.situation === 'ALONE'}
+                            value="혼자"
+                            checked={recipeForm.situation === '혼자'}
                             onChange={handleInputChange}
                         />
                         혼자
@@ -324,10 +341,51 @@ const RecipeForm = () => {
                         <input
                             type="radio"
                             name="situation"
-                            value="TOGETHER"
+                            value="가족"
+                            checked={recipeForm.situation === '가족'}
                             onChange={handleInputChange}
                         />
-                        같이
+                        가족
+                    </label>
+                    <label>
+                        <input
+                            type="radio"
+                            name="situation"
+                            value="친구"
+                            checked={recipeForm.situation === '친구'}
+                            onChange={handleInputChange}
+                        />
+                        친구
+                    </label>
+                    <label>
+                        <input
+                            type="radio"
+                            name="situation"
+                            value="연인"
+                            checked={recipeForm.situation === '연인'}
+                            onChange={handleInputChange}
+                        />
+                        연인
+                    </label>
+                    <label>
+                        <input
+                            type="radio"
+                            name="situation"
+                            value="일상"
+                            checked={recipeForm.situation === '일상'}
+                            onChange={handleInputChange}
+                        />
+                        일상
+                    </label>
+                    <label>
+                        <input
+                            type="radio"
+                            name="situation"
+                            value="상차림"
+                            checked={recipeForm.situation === '상차림'}
+                            onChange={handleInputChange}
+                        />
+                        상차림
                     </label>
                     {/* 이야기 해보고 이름 맞춰서 넣기 */}
                 </fieldset>
@@ -338,8 +396,8 @@ const RecipeForm = () => {
                         <input
                             type="radio"
                             name="foodStuff"
-                            value="MEAT"
-                            checked={recipeForm.foodStuff === 'MEAT'}
+                            value="고기"
+                            checked={recipeForm.foodStuff === '고기'}
                             onChange={handleInputChange}
                         />
                         고기
@@ -348,22 +406,63 @@ const RecipeForm = () => {
                         <input
                             type="radio"
                             name="foodStuff"
-                            value="EGG"
+                            value="해산물"
+                            checked={recipeForm.foodStuff === '해산물'}
                             onChange={handleInputChange}
                         />
-                        계란
+                        해산물
+                    </label>
+                    <label>
+                        <input
+                            type="radio"
+                            name="foodStuff"
+                            value="채소"
+                            checked={recipeForm.foodStuff === '채소'}
+                            onChange={handleInputChange}
+                        />
+                        채소
+                    </label>
+                    <label>
+                        <input
+                            type="radio"
+                            name="foodStuff"
+                            value="과일"
+                            checked={recipeForm.foodStuff === '과일'}
+                            onChange={handleInputChange}
+                        />
+                        과일
+                    </label>
+                    <label>
+                        <input
+                            type="radio"
+                            name="foodStuff"
+                            value="디저트"
+                            checked={recipeForm.foodStuff === '디저트'}
+                            onChange={handleInputChange}
+                        />
+                        디저트
+                    </label>
+                    <label>
+                        <input
+                            type="radio"
+                            name="foodStuff"
+                            value="음료"
+                            checked={recipeForm.foodStuff === '음료'}
+                            onChange={handleInputChange}
+                        />
+                        음료
                     </label>
                     {/* 이야기 해보고 이름 맞춰서 넣기 */}
                 </fieldset>
 
                 <fieldset>
-                    <legend className={'block text-gray-700 text-sm font-bold mb-2'}>분류:</legend>
+                    <legend className={'block text-gray-700 text-sm font-bold mb-2'}>타입:</legend>
                     <label>
                         <input
                             type="radio"
                             name="foodNationType"
-                            value="KOREAN"
-                            checked={recipeForm.foodNationType === 'KOREAN'}
+                            value="한식"
+                            checked={recipeForm.foodNationType === '한식'}
                             onChange={handleInputChange}
                         />
                         한식
@@ -372,7 +471,8 @@ const RecipeForm = () => {
                         <input
                             type="radio"
                             name="foodNationType"
-                            value="CHINESE"
+                            value="중식"
+                            checked={recipeForm.foodNationType === '중식'}
                             onChange={handleInputChange}
                         />
                         중식
@@ -381,7 +481,8 @@ const RecipeForm = () => {
                         <input
                             type="radio"
                             name="foodNationType"
-                            value="JAPANESE"
+                            value="일식"
+                            checked={recipeForm.foodNationType === '일식'}
                             onChange={handleInputChange}
                         />
                         일식
@@ -390,7 +491,8 @@ const RecipeForm = () => {
                         <input
                             type="radio"
                             name="foodNationType"
-                            value="ETCWESTERN"
+                            value="양식"
+                            checked={recipeForm.foodNationType === '양식'}
                             onChange={handleInputChange}
                         />
                         양식
@@ -399,7 +501,8 @@ const RecipeForm = () => {
                         <input
                             type="radio"
                             name="foodNationType"
-                            value="ETC"
+                            value="기타"
+                            checked={recipeForm.foodNationType === '기타'}
                             onChange={handleInputChange}
                         />
                         기타
@@ -464,11 +567,12 @@ const RecipeForm = () => {
                             </div>
                         ))}
                         {isEditMode && (
-                            <input type="file" multiple onChange={(e) => handleNewImageChange(e, pairIndex)}/>
+
+                                <input type="file" multiple onChange={(e) => handleNewImageChange(e, pairIndex)}/>
                         )}
                         {detail.explanations.map((explanation, index) => (
                             <div key={index}>
-                                <legend className={'block text-gray-700 text-sm font-bold mb-2'}>조리과정 설명:</legend>
+                            <legend className={'block text-gray-700 text-sm font-bold mb-2'}>조리과정 설명:</legend>
                                 <input
                                     type="text"
                                     value={explanation}
