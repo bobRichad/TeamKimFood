@@ -24,13 +24,13 @@ function LoginHandler(){
               data: params.toString()
             });
             console.log('Response', res);
-            if (res.status === 200) {
-              const safeRedirectUrl = res.data.redirectUrl;
-                   if (safeRedirectUrl.startsWith("http://localhost:3000/")) {
-                  window.location.href = safeRedirectUrl;
-
+             //성공적으로 로그인이 됐는지 확인
+            if (res.status === 200 && res.data.success) {
+             localStorage.setItem('accessToken',res.data.accessToken);
+             localStorage.setItem('userInfo',res.data.userInfo);
+              navigate('/boardlist');
             }else {
-                 console.error('잘못된 url 경로입니다.');
+                 console.error('로그인 실패');
              }
              }
              } catch (error) {
