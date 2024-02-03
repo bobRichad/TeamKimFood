@@ -44,33 +44,33 @@ const RecipeView = () => {
         loadRecipe();
     }, [id]);
 
-    useEffect(() => {
-        const loadRecipe = async () => {
-            try {
-                const response = await axios.get(`http://localhost:8080/api/recipe/${id}`,{
-                    headers: {
-                        'Authorization': `Bearer ${authToken}`
-                    }
-                });
-                setRecipe(response.data);
-            } catch (error) {
-                console.error('레시피를 불러오는 데 실패했습니다.', error);
-            }
-        };
-        const loadComments = async () => {
-            try {
-                const response = await axios.get(`http://localhost:8080/api/comments/recipe/${id}`, {
-                    headers: {
-                        'Authorization': `Bearer ${authToken}`
-                    }
-                });
-                setComments(response.data);
-            } catch (error) {
-                console.error('댓글을 불러오는 데 실패했습니다.', error);
-            }
-        };
-        loadRecipe();
-    }, [id]);
+    // useEffect(() => {
+    //     const loadRecipe = async () => {
+    //         try {
+    //             const response = await axios.get(`http://localhost:8080/api/recipe/${id}`,{
+    //                 headers: {
+    //                     'Authorization': `Bearer ${authToken}`
+    //                 }
+    //             });
+    //             setRecipe(response.data);
+    //         } catch (error) {
+    //             console.error('레시피를 불러오는 데 실패했습니다.', error);
+    //         }
+    //     };
+    //     const loadComments = async () => {
+    //         try {
+    //             const response = await axios.get(`http://localhost:8080/api/comments/recipe/${id}`, {
+    //                 headers: {
+    //                     'Authorization': `Bearer ${authToken}`
+    //                 }
+    //             });
+    //             setComments(response.data);
+    //         } catch (error) {
+    //             console.error('댓글을 불러오는 데 실패했습니다.', error);
+    //         }
+    //     };
+    //     loadRecipe();
+    // }, [id]);
 
     const renderIngredientsAndDosages = () => {
         if (recipe && recipe.oneRecipeIngDoVos) {

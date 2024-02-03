@@ -129,7 +129,7 @@ public class Member {
         member.setNickname(memberFormDto.getNickname());
         member.setPhoneNumber(memberFormDto.getPhoneNumber());
         member.setMemberRole(MemberRole.USER);
-        //member.setMemberRole(MemberRole.ADMIN);
+//        member.setMemberRole(MemberRole.ADMIN);
         return member;
     }
 

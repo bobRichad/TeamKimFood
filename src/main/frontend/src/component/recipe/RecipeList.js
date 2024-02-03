@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const RecipeList = () => {
     const [recipes, setRecipes] = useState([]);
@@ -73,6 +73,7 @@ const formatDate = (dateString) => {
 };
 
 const Pagination = ({ currentPage, setPage, totalPages, authToken }) => {
+    const navigate = useNavigate();
     // 이전 페이지 이동 함수
     const handlePrevious = () => {
         if (currentPage > 0) {

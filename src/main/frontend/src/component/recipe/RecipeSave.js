@@ -143,7 +143,7 @@ const RecipeForm = () => {
             };
         });
     };
-    const handleAddExplanation = (pairIndex) => {
+    const handleAddExplanation = () => {
         setRecipeForm(prevForm => {
             const newRecips = [...prevForm.recips];
             const newRecip = {
@@ -282,7 +282,7 @@ const RecipeForm = () => {
 
             if (response.status === 200) {
                 console.log('레시피가 성공적으로 수정되었습니다.');
-                navigate(`/api/recipe/${id}`);
+                navigate(`/recipe/${id}`);
             } else {
                 console.error('레시피 수정에 실패했습니다.');
             }
@@ -582,7 +582,7 @@ const RecipeForm = () => {
                         ))}
                     </fieldset>
                 ))}
-                        <button type="button" onClick={() => handleAddExplanation(pairIndex)}>
+                        <button type="button" onClick={() => handleAddExplanation()}>
                             설명 및 이미지 추가
                         </button>
 

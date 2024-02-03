@@ -21,6 +21,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Repository
 @RequiredArgsConstructor
@@ -277,16 +279,16 @@ public class RecipeQueryRepository implements RecipeCustomRepository{
                 .fetchOne();
         return new PageImpl<>(mainpageRecipeDtos, pageable, total);
     }
-        public Page<MainpageRecipeDto> getAllOrderByRankPoint(Pageable pageable) {
+        public Page<RankRecipeDto> getAllOrderByRankPoint(Pageable pageable) {
             QRecipe recipe = QRecipe.recipe;
             QMember member = QMember.member;
             QFoodImg foodImg = QFoodImg.foodImg;
             QRank rank = QRank.rank;
-            List<MainpageRecipeDto> mainpageRecipeDtos = queryFactory.select(
-                            new QMainpageRecipeDto(
+            List<RankRecipeDto> RankRecipeDto = queryFactory.select(
+                            new QRankRecipeDto(
                                     recipe.id,
                                     recipe.title,
-                                    recipe.viewCount,
+                                    recipe.score,
                                     foodImg.imgUrl,
                                     member.nickname,
                                     recipe.writeDate
@@ -301,6 +303,23 @@ public class RecipeQueryRepository implements RecipeCustomRepository{
                     .offset(pageable.getOffset())
                     .limit(pageable.getPageSize())
                     .fetch();
+            // 레시피 ID 리스트를 생성합니다.
+            List<Long> recipeIds = RankRecipeDto.stream()
+                    .map(com.tkf.teamkimfood.dto.RankRecipeDto::getId)
+                    .collect(Collectors.toList());
+
+            // 레시피 ID와 해당 레시피의 총 추천수를 매핑하는 Map을 생성합니다.
+            Map<Long, Long> totalScoresMap = queryFactory
+                    .select(rank.recipe.id, rank.recipeRecoTotal.sum())
+                    .from(rank)
+                    .where(rank.recipe.id.in(recipeIds))
+                    .groupBy(rank.recipe.id)
+                    .fetch()
+                    .stream()
+                    .collect(Collectors.toMap(tuple -> tuple.get(0, Long.class), tuple -> tuple.get(1, Long.class)));
+
+            // RankRecipeDto 객체의 totalScore를 설정합니다.
+            RankRecipeDto.forEach(rrd -> rrd.setTotalScore(totalScoresMap.getOrDefault(rrd.getId(), 0L)));
 
             Long total = queryFactory
                     .select(Wildcard.count)
@@ -308,7 +327,7 @@ public class RecipeQueryRepository implements RecipeCustomRepository{
                     .join(foodImg.recipe, recipe)
                     .where(foodImg.repImgYn.eq("Y"))
                     .fetchOne();
-            return new PageImpl<>(mainpageRecipeDtos, pageable, total);
+            return new PageImpl<>(RankRecipeDto, pageable, total);
         }
     //수정전 데이터 불러오기용
     public OneRecipeForUpdateVo findOneByEmail(Long recipeId, Long userId) {

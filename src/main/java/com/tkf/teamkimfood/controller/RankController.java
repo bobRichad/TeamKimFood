@@ -2,6 +2,7 @@ package com.tkf.teamkimfood.controller;
 
 import com.tkf.teamkimfood.dto.MainpageRecipeDto;
 import com.tkf.teamkimfood.dto.MemberScoreTotalDto;
+import com.tkf.teamkimfood.dto.RankRecipeDto;
 import com.tkf.teamkimfood.service.RankService;
 import com.tkf.teamkimfood.service.RecipeService;
 import lombok.RequiredArgsConstructor;
@@ -22,8 +23,8 @@ public class RankController {
 
     //추천수 기반 랭크 조회(레시피)
     @GetMapping("/api/rank/recipe/recommend")
-    public Page<MainpageRecipeDto> seeRecipeOrderByTotalRecommend(@RequestParam(defaultValue = "0")int page,
-                                                                  @RequestParam(defaultValue = "10") int size) {
+    public Page<RankRecipeDto> seeRecipeOrderByTotalRecommend(@RequestParam(defaultValue = "0")int page,
+                                                              @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
         return recipeService.getAllOrderByRankPoint(pageable);
     }

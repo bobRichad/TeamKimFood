@@ -14,7 +14,20 @@ function ScoreRecipe(){
     const fetchRecipes = async (currentPage) => {
         try {
             const res = await axios.get(`http://localhost:8080/api/rank/recipe/recommend?page=${currentPage}&size=10`);
-            setInputData(res.data.content);
+            // 중복을 추적하기 위한 Set
+            const recipeIdSet = new Set();
+            const uniqueRecipes = res.data.content.filter(item => {
+                if (recipeIdSet.has(item.id)) {
+                    // 이미 처리된 recipeId인 경우 건너뜀
+                    return false;
+                } else {
+                    // 처음 보는 recipeId인 경우 Set에 추가하고 포함시킴
+                    recipeIdSet.add(item.id);
+                    return true;
+                }
+            });
+
+            setInputData(uniqueRecipes);
             setTotalPages(res.data.totalPages);
         } catch (e) {
             console.error(e.message);
@@ -36,14 +49,14 @@ function ScoreRecipe(){
                             <th className="text-left py-3 px-4 uppercase font-semibold text-sm">순위</th>
                             <th className="text-left py-3 px-4 uppercase font-semibold text-sm">제목</th>
                             <th className="text-left py-3 px-4 uppercase font-semibold text-sm">작성자</th>
-                            <th className="text-left py-3 px-4 uppercase font-semibold text-sm">조회수</th>
+                            <th className="text-left py-3 px-4 uppercase font-semibold text-sm">추천수</th>
                             <th className="text-left py-3 px-4 uppercase font-semibold text-sm">글쓴일자</th>
                         </tr>
                         </thead>
                         <tbody className="text-gray-700">
                         {inputData.length > 0 ? (
                             inputData.map((rowData, index) => (
-                                <tr key={rowData.recipe_id}>
+                                <tr key={rowData.id}>
                                     <td className="text-left py-3 px-4">{index + 1}</td>
                                     <td className="text-left py-3 px-4">
                                         <div className="flex items-center">
@@ -58,7 +71,7 @@ function ScoreRecipe(){
                                         </div>
                                     </td>
                                     <td className="text-left py-3 px-4">{rowData.nickName}</td>
-                                    <td className="text-left py-3 px-4">{rowData.viewCount}</td>
+                                    <td className="text-left py-3 px-4">{rowData.totalScore}</td>
                                     <td className="text-left py-3 px-4">{new Date(rowData.writeDate).toLocaleDateString()}</td>
                                 </tr>
                             ))

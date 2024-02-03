@@ -277,7 +277,7 @@ public class RecipeService {
         }
     }
     //추천수기반 조회
-    public Page<MainpageRecipeDto> getAllOrderByRankPoint(Pageable pageable) {
+    public Page<RankRecipeDto> getAllOrderByRankPoint(Pageable pageable) {
         return recipeQueryRepository.getAllOrderByRankPoint(pageable);
     }
 
