@@ -25,6 +25,9 @@ import ScoreRecipe from "./component/rank/ScoreRecipe";
 import ViewTotalCountRecipe from "./component/rank/ViewTotalCountRecipe";
 import ScoreMember from "./component/rank/ScoreMember";
 import Survey from './component/recipe/RecipePreferenceSurvey';
+import Mypage from './component/mypage/MyPage';
+import MemberEditForm from './component/mypage/MemberEditForm';
+import MemberDeleteForm from './component/mypage/MemberDeleteForm';
 
 
 function App() {
@@ -50,6 +53,10 @@ function App() {
                     <Route path={"/rank/recipe/totalcount"} element={<ViewTotalCountRecipe/>}/>
                     <Route path={"/rank/member/recommend"} element={<ScoreMember/>}/>
                     <Route path="/survey" element={<Survey/>} />
+                    <Route path="/mypage" element={<Mypage/>} />
+                    <Route path="/mypage/edit-profile" element={<MemberEditForm/>} />
+                    <Route path="/mypage/delete-profile" element={<MemberDeleteForm/>} />
+
                 </Routes>
                 </div>
 

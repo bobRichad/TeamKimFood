@@ -89,7 +89,7 @@ function TopNav() {
             navigate('/admin');
         } else {
             console.log('마이 페이지로 이동 완료')
-            navigate('/main');
+            navigate('/mypage');
         }
     };
 
@@ -120,8 +120,7 @@ function TopNav() {
                         <>
                             <li><a href="/signin"><span className="SlPencil"><SlPencil/></span>회원가입</a></li>
                             <li><a href="/login"><span className="SlLogin"><SlLogin/></span>로그인</a></li>
-                            <li><a href="/survey"><span className="Survey"><BsFillQuestionCircleFill/></span>설문조사</a>
-                            </li>
+                            <li><a href="/survey"><span className="Survey"><BsFillQuestionCircleFill/></span>설문조사</a></li>
                         </>
                     ) : (
                         <>
@@ -135,11 +134,13 @@ function TopNav() {
                             )}
                             <li><a href="/main" onClick={handleLogout}>
                                 <span className="SlLogout"><SlLogout/></span>로그아웃</a></li>
+                            <li><a href="/survey"><span className="Survey"><BsFillQuestionCircleFill/></span>설문조사</a>
+                            </li>
                         </>
                     )}
                 </ul>
                 <div className="small-nav">
-                    <img src="/menu-icon.png" className="menu-icon" alt="Menu Icon"/>
+                <img src="/menu-icon.png" className="menu-icon" alt="Menu Icon"/>
                 </div>
             </div>
 
