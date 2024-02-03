@@ -27,7 +27,6 @@ public class RankQueryRepository {
     //추천갯수 세주는 로직
     public Long recommendationTotal(Long id) {
         QRank rank = QRank.rank;
-        QRecipe recipe = QRecipe.recipe;
         return queryFactory.select(Wildcard.count)
                 .from(rank)
                 .where(rank.recipe.id.eq(id))
@@ -47,11 +46,11 @@ public class RankQueryRepository {
                                 rank.recipeRecoTotal.sum().as("totalScore")
                         )
                 )
-                .from(rank)
-                .join(rank.recipe, recipe)
-                .join(rank.member, member)
-                .groupBy(rank.member.id, member.nickname)
-                .orderBy(rank.recipeRecoTotal.sum().desc())
+                .from(recipe) // 레시피에서 시작
+                .join(recipe.member, member) // 레시피의 멤버와 조인
+                .leftJoin(recipe.rank, rank) // 레시피의 추천수와 조인
+                .groupBy(member.id) // 멤버별로 그룹화
+                .orderBy(rank.recipeRecoTotal.sum().desc()) // 멤버가 받은 추천수 합계로 정렬
                 .fetch();
     }
 }

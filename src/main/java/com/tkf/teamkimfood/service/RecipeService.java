@@ -201,7 +201,7 @@ public class RecipeService {
 //                .toList();
 //    }
     public Page<MainpageRecipeDto> getMainForMember(CategoryPreferenceDto categoryPreferenceDto, RecipeSearchDto recipeSearchDto, Pageable pageable) {
-        Member member = memberQueryRepository.findOne(categoryPreferenceDto.getId());
+//        Member member = memberQueryRepository.findOne(categoryPreferenceDto.getId());
 //
 //        categoryPreferenceDto.setSituation(member.getMemberPreference().getSituation());
 //        categoryPreferenceDto.setFoodStuff(member.getMemberPreference().getFoodStuff());
@@ -240,7 +240,6 @@ public class RecipeService {
                 log.info("아이디값 확인"+foodImgIds);
                 //이미지수정
                 for (int i = 0; i < foodImgIds.size(); i++) {
-
                     foodImgService.updateFoodImg(foodImgIds.get(i), explanations.get(i), foodImgFileList.get(i));
                 }
             }
@@ -278,7 +277,7 @@ public class RecipeService {
         }
     }
     //추천수기반 조회
-    public Page<MainpageRecipeDto> getAllOrderByRankPoint(Pageable pageable) {
+    public Page<RankRecipeDto> getAllOrderByRankPoint(Pageable pageable) {
         return recipeQueryRepository.getAllOrderByRankPoint(pageable);
     }
 

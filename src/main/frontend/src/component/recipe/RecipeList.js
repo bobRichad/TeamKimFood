@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const RecipeList = () => {
     const [recipes, setRecipes] = useState([]);
@@ -35,32 +35,31 @@ const RecipeList = () => {
                 {recipes.map((recipe, index) => (
                     <RecipeItem key={recipe.id} recipe={recipe} navigate={navigate}/>
                 ))}
-                <Pagination currentPage={page} setPage={setPage} totalPages={totalPages} />
+                <Pagination currentPage={page} setPage={setPage} totalPages={totalPages} authToken={authToken} />
             </div>
         </div>
     );
 };
 
 const RecipeItem = ({ recipe, navigate, currentPage }) => {
-    console.log("이미지 : ", recipe.imgUrl);
     const imageUrl = `${process.env.PUBLIC_URL}${recipe.imgUrl}`;
     const handleTitleClick = () => {
-        navigate(`/api/recipe/${recipe.id}`, { state: { fromPage: currentPage } })
+        navigate(`/recipe/${recipe.id}`, { state: { fromPage: currentPage } })
     }
     if (!recipe){
         return <div>표시할 레시피가 없습니다.</div>;
     } else {
         return (
-            <div className={"border rounded-lg p-4 w-60 text-center"}>
+            <div className={"border rounded-lg p-4 w-60 text-center "}>
                 <img onClick={handleTitleClick} src={imageUrl} alt={recipe.title} className={" cursor-pointer w-full h-40 object-cover rounded-t-lg"}/>
-                <div className={"border-t my-2"}></div>
+                <div className={"border-t my-2 "}></div>
                 <h3 onClick={handleTitleClick}
-                    className={"cursor-pointer mt-2 text-lg font-semibold"}>{recipe.title}</h3>
+                    className={"cursor-pointer mt-2 text-lg font-semibold font-[SpoqaHanSansNeo-B]"}>{recipe.title}</h3>
                 <div>
 
-                    <span className={"text-sm"}>{formatDate(recipe.writeDate)}</span>
+                    <span className={"text-sm font-[NanumMyeongjo]"}>{formatDate(recipe.writeDate)}</span>
                 </div>
-                <div className="flex justify-between items-center mt-2 text-sm">
+                <div className="flex justify-between items-center mt-2 text-sm font-[GmarketSans-M]">
                     <span>조회수: {recipe.viewCount}</span>
                     <span>{recipe.nickName}</span>
                 </div>
@@ -73,7 +72,8 @@ const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString('ko-KR', options);
 };
 
-const Pagination = ({ currentPage, setPage, totalPages }) => {
+const Pagination = ({ currentPage, setPage, totalPages, authToken }) => {
+    const navigate = useNavigate();
     // 이전 페이지 이동 함수
     const handlePrevious = () => {
         if (currentPage > 0) {
@@ -82,6 +82,14 @@ const Pagination = ({ currentPage, setPage, totalPages }) => {
             alert('이전 페이지가 없습니다.');
         }
     };
+
+    // 글쓰기 버튼 클릭 이벤트 핸들러
+    const handleWriteClick = () => {
+        navigate('/recipe/write');
+    };
+
+    // 로그인 여부 확인
+    const isLoggedIn = !!authToken;
 
     // 다음 페이지 이동 함수
     const handleNext = () => {
@@ -117,6 +125,12 @@ const Pagination = ({ currentPage, setPage, totalPages }) => {
             <button onClick={handleNext}
             className={"bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-6 rounded mx-2"}
             >다음</button>
+            {/* 로그인 시에만 보이는 글쓰기 버튼 */}
+            {isLoggedIn && (
+                <button onClick={handleWriteClick}
+                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded mx-2"
+                >글쓰기</button>
+            )}
         </div>
     );
 };
