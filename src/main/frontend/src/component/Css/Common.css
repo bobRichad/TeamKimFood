@@ -45,11 +45,14 @@ header {
     margin: 0 auto;
 }
 
+.form-control {
+    min-width: 240px;
+}
+
 .signInUp {
     display: flex;
     align-items: center;
     text-align: center;
-    margin-left: 20px;
     min-width: 10%;
     list-style: none;
 }
@@ -58,19 +61,19 @@ header {
     display: flex;
     align-items: center;
     text-decoration: none;
-    padding-left: 8rem;
+    padding-left: 3.5rem;
 }
 
-.SlLogin, .SlLogout, .SlPencil, .SlSettings, .SlWrench {
-    margin-right: 5px;
+.SlLogin, .SlLogout, .SlPencil, .SlSettings, .SlWrench .Survey{
+    margin-right: 5px !important;
 }
 
-.ui-menu-icon {
+.menu-icon {
     width: 6em;
     display: none;
 }
 
-.ui-menu-icon a:hover {
+.menu-icon a:hover {
     --bs-dropdown-bg: var(--beige);
     --bs-navbar-toggler-focus-width: 90%;
 }
@@ -191,9 +194,9 @@ a:hover {
 
 li {
     display: inline-flex;
-    margin-left: 15px;
     list-style: none;
 }
+
 /* End Common */
 .main-container {
     position: relative;
@@ -404,7 +407,7 @@ h5 {
 h6 {
     font-size: 8px;
 }
-
+body {min-width: 500px}
 body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,textarea,p,blockquote,th,td,input,select,textarea,button{margin:0;padding:0}
 fieldset,img{border:0 none}
 dl,ul,ol,menu,li {list-style:none}
@@ -509,25 +512,28 @@ input[type='search']::-webkit-search-cancel-button,textarea{-webkit-appearance:n
 /* Media Query */
 
 /* xxxl */
-@media (max-width: 1799.98px) {
+@media (max-width: 1920px) {
     .smail-nav {
-        display: none;
+        display: none !important;
     }
 }
 
 /* xxl */
 @media (max-width: 1539.98px) {
-    .smail-nav {
-        display: none;
-    }
+
     .d-flex {
         margin-right: 11rem;
     }
 }
 
 /* xl */
-@media (max-width: 1279.98px) {
-
+@media (max-width: 1497px) {
+    .signInUp {
+        display: none !important;
+    }
+    .menu-icon {
+        display: flex;
+    }
 }
 
 /* lg */

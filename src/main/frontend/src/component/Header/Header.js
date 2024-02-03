@@ -1,16 +1,19 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../Css/Common.css';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+
 
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
 import Navbar from 'react-bootstrap/Navbar';
-import { SlLogin, SlPencil  } from "react-icons/sl";
+import { SlLogin, SlLogout , SlPencil, SlSettings, SlWrench } from "react-icons/sl";
 import { BsFillQuestionCircleFill } from "react-icons/bs";
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+
 import { useNavigate } from 'react-router-dom';
-import { KAKAO_AUTH_URL } from '../OAuth';
+import { TiThMenu } from "react-icons/ti";
+import { IconContext } from "react-icons";
 
 //JWT 디코딩
 function TopNav() {
@@ -115,48 +118,29 @@ function TopNav() {
                 <ul className="signInUp flex items-center space-x-4">
                     {!isLoggedIn ? (
                         <>
-                            <li><a href="/signin"><SlPencil /> 회원가입</a></li>
-                            <li className="flex items-center space-x-2">
-                                <a href="/login" onClick={handleLoginClick}><SlLogin /> 로그인</a>
-                                <a
-                                    href="/survey"
-                                    className="hover:underline"
-                                    onClick={(e) => { e.preventDefault(); navigate('/survey'); }}>
-                                    <BsFillQuestionCircleFill /> 설문조사
-                                </a>
-                            </li>
-                            {/*<li>*/}
-                            {/*    <a href={KAKAO_AUTH_URL} className="kakaobtn w-64 h-10 rounded-lg flex items-center justify-center text-lg">*/}
-                            {/*        <img src={`${process.env.PUBLIC_URL}/kakao_login.png`} alt="카카오 로그인" />*/}
-                            {/*    </a>*/}
-                            {/*</li>*/}
-                            {/* 카카오 로그인 버튼 */}
-                            <li> <a href={KAKAO_AUTH_URL} className="kakaobtn">
-                                <img src={`${process.env.PUBLIC_URL}/kakao_login.png`} alt="카카오 로그인" />
-                            </a>
+                            <li><a href="/signin"><span className="SlPencil"><SlPencil/></span>회원가입</a></li>
+                            <li><a href="/login"><span className="SlLogin"><SlLogin/></span>로그인</a></li>
+                            <li><a href="/survey"><span className="Survey"><BsFillQuestionCircleFill/></span>설문조사</a>
                             </li>
                         </>
                     ) : (
                         <>
-                            <li className="flex items-center space-x-2">
-                                {isAdmin ? (
-                                    <a onClick={handleAdminOrMyPageClick}>관리자 페이지</a>
-                                ) : (
-                                    <a onClick={handleAdminOrMyPageClick}>마이 페이지</a>
-                                )}
-                                <a
-                                    href="/survey"
-                                    className="hover:underline"
-                                    onClick={(e) => { e.preventDefault(); navigate('/survey'); }}>
-                                    <BsFillQuestionCircleFill /> 설문조사
-                                </a>
-                            </li>
-                            <li><a href="/" onClick={handleLogout}><SlLogin /> 로그아웃</a></li>
+                            {isAdmin ? (
+                                <li><a onClick={handleAdminOrMyPageClick}>
+                                    <span className="SlWrench"><SlWrench/><span className="SlWrench"/></span>관리자 페이지</a>
+                                </li>
+                            ) : (
+                                <li><a href="/mypage" onClick={handleAdminOrMyPageClick}>
+                                    <span className="SlSettings"><SlSettings/></span>마이 페이지</a></li>
+                            )}
+                            <li><a href="/main" onClick={handleLogout}>
+                                <span className="SlLogout"><SlLogout/></span>로그아웃</a></li>
                         </>
                     )}
                 </ul>
-                <img src={`${process.env.PUBLIC_URL}/menu-icon.png`} className="ui-menu-icon" />
-
+                <div className="small-nav">
+                    <img src="/menu-icon.png" className="menu-icon" alt="Menu Icon"/>
+                </div>
             </div>
 
             <Navbar expand="lg" className="navbar">
@@ -164,31 +148,7 @@ function TopNav() {
 
                     <ul className="navbar-nav">
                         <li className="depth-1 navbar-text"><a href="#">오늘의 요리</a></li>
-                        <div className="relative group">
-                            <a href="#"
-                               className="inline-block mt-1 py-2 px-4 text-sm font-medium font-[SpoqaHanSansNeo-B]">인기
-                                레시피</a>
-                            <div
-                                className="absolute hidden group-hover:block z-10 bg-white divide-y divide-gray-100 rounded shadow w-40">
-                                <ul className="py-1 text-center">
-                                    <li>
-                                        <a href="/rank/recipe/recommend"
-                                           className="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900">추천수
-                                            랭킹</a>
-                                    </li>
-                                    <li>
-                                        <a href="/rank/recipe/totalcount"
-                                           className="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900">조회수
-                                            랭킹</a>
-                                    </li>
-                                    <li>
-                                        <a href="/rank/member/recommend"
-                                           className="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900">유저
-                                            랭킹</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
+                        <li className="depth-1 navbar-text"><a href="#">인기 레시피</a></li>
                         <li className="depth-1 navbar-text"><a href="#">매거진</a></li>
                     </ul>
 
