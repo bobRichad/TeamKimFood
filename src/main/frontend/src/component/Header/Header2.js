@@ -1,19 +1,17 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
+import '../Css/Common.css';
+
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
-import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
-import NavDropdown from 'react-bootstrap/NavDropdown';
 import { SlLogin, SlLogout , SlPencil, SlSettings, SlWrench } from "react-icons/sl";
 import { BsFillQuestionCircleFill } from "react-icons/bs";
-import '../Css/Common.css';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { TiThMenu } from "react-icons/ti";
 import { IconContext } from "react-icons";
-import { KAKAO_AUTH_URL } from '../OAuth';
+
 
 //JWT 디코딩
 function TopNav() {
@@ -104,7 +102,7 @@ function TopNav() {
 
     return (
         <header>
-            <div className="hd_top">
+            <div className="hd_top flex items-center justify-between">
                 <span className="logo"><a href="/">YoriJori</a></span>
                 <Form className="d-flex">
                     <Form.Control

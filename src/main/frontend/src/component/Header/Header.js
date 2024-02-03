@@ -5,12 +5,13 @@ import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
 import Navbar from 'react-bootstrap/Navbar';
-import { SlLogin, SlPencil  } from "react-icons/sl";
+import { SlLogin, SlLogout , SlPencil, SlSettings, SlWrench } from "react-icons/sl";
 import { BsFillQuestionCircleFill } from "react-icons/bs";
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { KAKAO_AUTH_URL } from '../OAuth';
+import { IconContext } from "react-icons";
+
 
 //JWT 디코딩
 function TopNav() {
