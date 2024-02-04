@@ -1,5 +1,6 @@
 
 import React, { useEffect } from 'react';
+// import { Route, Routes } from 'react-router-dom';
 import { Route, Routes } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './component/Css/Common.css';
@@ -28,6 +29,7 @@ import Survey from './component/recipe/RecipePreferenceSurvey';
 import Mypage from './component/mypage/MyPage';
 import MemberEditForm from './component/mypage/MemberEditForm';
 import MemberDeleteForm from './component/mypage/MemberDeleteForm';
+import MyPosts from './component/mypage/MyPosts';
 
 
 function App() {
@@ -56,6 +58,7 @@ function App() {
                     <Route path="/mypage" element={<Mypage/>} />
                     <Route path="/mypage/edit-profile" element={<MemberEditForm/>} />
                     <Route path="/mypage/delete-profile" element={<MemberDeleteForm/>} />
+                    <Route path="/mypage/my-posts" element={<MyPosts/>} />
 
                 </Routes>
                 </div>

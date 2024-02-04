@@ -22,7 +22,7 @@ public class MyPostsControllerTest {
 //        when(myPostsService.getPostById(postId)).thenReturn(mockPost);
 //
 //        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(myPostsController).build();
-//        mockMvc.perform(MockMvcRequestBuilders.get("/mypage/myposts/{id}", postId))
+//        mockMvc.perform(MockMvcRequestBuilders.get("/mypage/my-posts/{id}", postId))
 //                .andExpect(MockMvcResultMatchers.status().isOk())
 //                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(postId))
 //                .andExpect(MockMvcResultMatchers.jsonPath("$.title").value("테스트 제목"))
@@ -35,7 +35,7 @@ public class MyPostsControllerTest {
 //        Long postId = 1L;
 //
 //        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(myPostsController).build();
-//        mockMvc.perform(MockMvcRequestBuilders.delete("/mypage/myposts/{id}", postId))
+//        mockMvc.perform(MockMvcRequestBuilders.delete("/mypage/my-posts/{id}", postId))
 //                .andExpect(MockMvcResultMatchers.status().isOk())
 //                .andDo(print());
 //

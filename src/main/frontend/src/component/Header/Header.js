@@ -12,8 +12,6 @@ import { SlLogin, SlLogout , SlPencil, SlSettings, SlWrench } from "react-icons/
 import { BsFillQuestionCircleFill } from "react-icons/bs";
 
 import { useNavigate } from 'react-router-dom';
-import { TiThMenu } from "react-icons/ti";
-import { IconContext } from "react-icons";
 
 //JWT 디코딩
 function TopNav() {
@@ -102,6 +100,27 @@ function TopNav() {
         handleLogin(loginCredentials);
     };
 
+    // 화면 크기에 따라 네비게이션 바 상태를 조절하는 로직 추가
+    useEffect(() => {
+        function handleResize() {
+            if (window.innerWidth > 750) {
+                setIsNavExpanded(false); // 화면이 넓으면 네비게이션 바 축소
+            }
+        }
+
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    const [isNavExpanded, setIsNavExpanded] = useState(false); // 네비게이션 확장 상태 추가
+
+    const toggleNav = () => {
+        console.log("Before toggle:", isNavExpanded);
+        setIsNavExpanded(!isNavExpanded);
+        console.log("After toggle:", isNavExpanded);
+    };
+
+
     return (
         <header>
             <div className="hd_top flex items-center justify-between">
@@ -139,12 +158,12 @@ function TopNav() {
                         </>
                     )}
                 </ul>
-                <div className="small-nav">
-                <img src="/menu-icon.png" className="menu-icon" alt="Menu Icon"/>
+                <div className="small-nav" onClick={toggleNav}>
+                    <img src="/menu-icon.png" className="menu-icon" alt="Menu Icon"/>
                 </div>
             </div>
 
-            <Navbar expand="lg" className="navbar">
+            <Navbar expand="lg" className={`navbar ${isNavExpanded ? "expanded" : ""}`}>
                 <Container fluid="true" id="contNav">
 
                     <ul className="navbar-nav">
