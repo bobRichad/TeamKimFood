@@ -14,12 +14,12 @@ public class MyPostsController {
     @Autowired
     private MyPostsService myPostsService;
 
-    @GetMapping("/mypage/myposts/{id}")
+    @GetMapping("/mypage/my-posts/{id}")
     public MyPosts getPostById(@PathVariable Long id) {
         return myPostsService.getPostById(id);
     }
 
-    @DeleteMapping("/mypage/myposts/{id}")
+    @DeleteMapping("/mypage/my-posts/{id}")
     public void deletePost(@PathVariable Long id) {
         myPostsService.deletePost(id);
     }
