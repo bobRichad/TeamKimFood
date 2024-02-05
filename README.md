@@ -1,5 +1,7 @@
 # :leaves: SpringBoot-TeamKim-YoriJori
-스프링부트와 React.js를 이용한 레시피 공유 사이트
+스프링부트와 React.js를 이용한 레시피 공유 사이트<br>
+http://192.168.0.37:3000/ <br>
+http://yorijolly.shop/
 <br>
 ## :computer: 프로젝트 소개
 1인가구의 증가! 배달료의 상승!으로 인해 나만 알고있는 꿀 레시피 공유 커뮤니티 입니다.
